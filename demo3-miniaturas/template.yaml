@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Demo 3 - Miniaturas automáticas al subir una imagen a S3
+
+# Los nombres de los buckets se construyen con el nombre del stack y el ID de la cuenta.
+# Así las políticas no hacen !Ref al bucket que dispara la función, lo que provocaría
+# una dependencia circular en CloudFormation.
+# El nombre del stack debe ir en minúsculas (ej. miniaturas-demo).
+
+Resources:
+  FotosOriginales:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-originales-${AWS::AccountId}"
+
+  FotosMiniaturas:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-miniaturas-${AWS::AccountId}"
+
+  MiniaturaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: miniatura.handler
+      CodeUri: src/
+      Runtime: nodejs24.x
+      Architectures:
+        - x86_64
+      MemorySize: 1024        # sharp aprovecha la CPU extra
+      Timeout: 30
+      Environment:
+        Variables:
+          DEST_BUCKET: !Sub "${AWS::StackName}-miniaturas-${AWS::AccountId}"
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "${AWS::StackName}-originales-${AWS::AccountId}"
+        - S3CrudPolicy:
+            BucketName: !Sub "${AWS::StackName}-miniaturas-${AWS::AccountId}"
+      Events:
+        SubidaFoto:
+          Type: S3
+          Properties:
+            Bucket: !Ref FotosOriginales     # nunca el bucket de miniaturas: bucle infinito
+            Events: s3:ObjectCreated:*
+
+Outputs:
+  BucketOriginales:
+    Value: !Ref FotosOriginales
+  BucketMiniaturas:
+    Value: !Ref FotosMiniaturas
+  NombreFuncion:
+    Value: !Ref MiniaturaFunction

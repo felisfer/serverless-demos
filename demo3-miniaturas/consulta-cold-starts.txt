@@ -1,0 +1,10 @@
+# Consulta para CloudWatch Logs Insights
+# Grupo de logs: /aws/lambda/<NombreFuncion de los Outputs>
+# Cuenta invocaciones y cold starts por minuto.
+
+filter @type = "REPORT"
+| stats count(*) as invocaciones,
+        count(@initDuration) as coldStarts,
+        avg(@duration) as duracionPromedioMs,
+        max(@initDuration) as initMaxMs
+  by bin(1m)

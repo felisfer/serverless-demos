@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Demo 2 - API de tareas con API Gateway, Lambda y DynamoDB
+
+Globals:
+  Function:
+    Runtime: nodejs24.x
+    MemorySize: 512
+    Timeout: 10
+
+Resources:
+  TareasTable:
+    Type: AWS::Serverless::SimpleTable   # llave primaria: id (String), modo on-demand
+
+  TareasFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.handler
+      CodeUri: src/
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TareasTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TareasTable
+      Events:
+        Listar:
+          Type: HttpApi
+          Properties:
+            Path: /tareas
+            Method: GET
+        Crear:
+          Type: HttpApi
+          Properties:
+            Path: /tareas
+            Method: POST
+
+Outputs:
+  ApiUrl:
+    Description: URL base de la API
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  TablaTareas:
+    Description: Nombre de la tabla DynamoDB
+    Value: !Ref TareasTable
