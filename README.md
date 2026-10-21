@@ -1,6 +1,6 @@
 # Demos de computación serverless con AWS Lambda
 
-Código de las tres demos de la exposición. Todo usa **Node.js 24** (`nodejs24.x`) y el AWS SDK para JavaScript v3.
+Código de las tres demos. Todo usa **Node.js 24** (`nodejs24.x`) y el AWS SDK para JavaScript v3.
 
 | Demo | Qué muestra | Herramienta |
 |---|---|---|
