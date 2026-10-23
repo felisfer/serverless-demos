@@ -16,6 +16,14 @@ demo2-api-tareas/
     └── package.json
 ```
 
+## Configurar AWS CLI
+Es necesario iniciar sesion con una cuenta de AWS.
+
+```bash
+aws login # seguir las instrucciones en la pantalla
+aws configure set region us-east-2 # o tu region
+```
+
 ## Desplegar
 
 ```bash
@@ -51,6 +59,26 @@ curl -X POST "$API/tareas" \
 curl "$API/tareas"
 ```
 
+En PowerShell (Windows):
+
+```powershell
+$API = "https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com"
+```
+
+```powershell
+Invoke-RestMethod -Method Post -Uri "$API/tareas" -ContentType "application/json" -Body '{"titulo":"Hola mundo"}'
+```
+
+```powershell
+Invoke-RestMethod "$API/tareas"
+```
+
+Si prefieres `curl.exe`, las comillas dobles del JSON deben escaparse:
+
+```powershell
+curl.exe -X POST "$API/tareas" -H "content-type: application/json" -d '{\"titulo\":\"Hola mundo\"}'
+```
+
 Ver los logs en vivo:
 
 ```bash
@@ -62,7 +90,7 @@ sam logs --stack-name tareas-api --tail
 ```bash
 sam build
 sam local start-api
-curl http://127.0.0.1:3000/tareas
+curl http://127.0.0.1:3000/tareas   # PowerShell: Invoke-RestMethod http://127.0.0.1:3000/tareas
 ```
 
 `sam local` ejecuta la función en un contenedor que imita a Lambda, pero **habla con la tabla real** de DynamoDB.
@@ -70,6 +98,13 @@ Pasa el nombre de la tabla con un archivo de variables:
 
 ```bash
 echo '{"TareasFunction":{"TABLE_NAME":"<valor de TablaTareas>"}}' > env.json
+sam local start-api --env-vars env.json
+```
+
+En PowerShell:
+
+```powershell
+'{"TareasFunction":{"TABLE_NAME":"<valor de TablaTareas>"}}' | Set-Content env.json -Encoding ascii
 sam local start-api --env-vars env.json
 ```
 

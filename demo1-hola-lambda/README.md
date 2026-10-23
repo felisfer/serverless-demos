@@ -17,6 +17,15 @@
    # {"saludo":"Hola, Fernando"}
    ```
 
+   En PowerShell (Windows):
+
+   ```powershell
+   $URL = "https://xxxxxxxx.lambda-url.us-east-1.on.aws"   # copia la tuya
+   curl.exe "${URL}?nombre=Fernando"
+   # o bien:
+   Invoke-RestMethod "${URL}?nombre=Fernando"
+   ```
+
 6. **Monitor → View CloudWatch logs** y abre el log stream más reciente.
 
 ## Tener en cuenta

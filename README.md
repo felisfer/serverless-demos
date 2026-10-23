@@ -25,6 +25,10 @@ node --version
 docker info --format '{{.ServerVersion}}'
 ```
 
+En PowerShel (Windows) los comandos son los mismos. Los bloques de cada demo incluyen su variante para PowerShell cuando la sintaxis cambia (variables, `curl`, comillas JSON, etc.).
+
+> En Windows PowerShell 5.1, `curl` es un alias de `Invoke-WebRequest`. Usa `curl.exe` o `Invoke-RestMethod`, como se muestra en cada demo.
+ 
 ## Al terminar
 
 Cada demo indica cómo borrar sus recursos. Lo más importante: **vaciar los buckets de la demo 3 antes de `sam delete`** y borrar la Function URL de la demo 1, que es pública.
