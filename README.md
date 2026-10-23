@@ -11,7 +11,7 @@ Código de las tres demos. Todo usa **Node.js 24** (`nodejs24.x`) y el AWS SDK p
 ## Requisitos
 
 - Cuenta de AWS con un usuario o rol con permisos para Lambda, API Gateway, DynamoDB, S3, IAM y CloudFormation
-- [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) configurada (`aws configure`)
+- [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) configurada (`aws login`)
 - [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
 - Node.js 24 y npm
 - Docker en ejecución (para `sam local` y para compilar `sharp` en la demo 3)
